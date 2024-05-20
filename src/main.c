@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rchavez@student.42heilbronn.de <rchavez    +#+  +:+       +#+        */
+/*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 17:51:26 by lglauch           #+#    #+#             */
-/*   Updated: 2024/05/20 09:21:37 by rchavez@stu      ###   ########.fr       */
+/*   Updated: 2024/05/20 11:57:56 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,13 @@ void	main_loop(void)
 	while (*get_run() == 1)
 	{
 		line = readline("🐚  ");
-		if (!line)
-			break ;
+		if (line == NULL)
+		{
+			//free because of ctrl + D
+			if (line)
+				free(line);
+			exit (0);
+		}
 		if (line && ft_strlen(line) > 0)
 			add_history(line);
 		tokens = tokenize(line);
