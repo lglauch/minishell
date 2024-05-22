@@ -16,3 +16,15 @@ guide:
 https://github.com/maiadegraaf/minishell?tab=readme-ov-file#what-is-bash-and-how-does-it-work
 
 https://achrafbelarif.medium.com/42cursus-minishell-29cd25f972e6
+
+
+
+
+
+TODO:
+
+ctrl + \ and then ctrl + d = wrong output?
+
+|| count as 1 operator but shouldnt be handled
+|| = operator[0] + |, operator[1] = |
+because || is included in bonus not in mandatory

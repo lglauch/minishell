@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: leo <leo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 10:07:51 by rchavez@stu       #+#    #+#             */
-/*   Updated: 2024/05/20 14:07:59 by rchavez          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:52:39 by leo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ int	count_lex(char *line)
 	i = 0;
 	count = 0;
 	last = 1;
-	while(line[i])
+	while (line[i])
 	{
 		if (is_op(line[i]))
 		{
 			last = 1;
 			count++;
-			while(line [i] && is_op(line[i]))
+			while (line [i] && is_op(line[i]))
 				i++;
 			i--;
 		}
-		else if(!is_spc(line[i]))
+		else if (!is_spc(line[i]))
 			last = 0;
 		i++;
 	}
@@ -45,7 +45,7 @@ int	count_cmd(char **args, int *j)
 	int	i;
 
 	i = *j;
-	while(args[*j] && !is_op(args[*j][0]))
+	while (args[*j] && !is_op(args[*j][0]))
 		*j += 1;
 	return (*j - i);
 }
@@ -55,7 +55,7 @@ int	count_ops(char **args, int *j)
 	int	i;
 
 	i = *j;
-	while(args[*j] && is_op(args[*j][0]))
+	while (args[*j] && is_op(args[*j][0]))
 		*j += 1;
 	return (*j - i);
 }
@@ -79,10 +79,12 @@ t_lexer	*tokenize(char *line)
 		printf("\nPreotection Missing\n");//											FIX!
 	while (++i < count)
 	{
-		ret[i].cmd = (char **)malloc(sizeof(char *) * (count_cmd(args, &j) + 1));
+		ret[i].cmd = (char **)malloc(sizeof(char *)
+				* (count_cmd(args, &j) + 1));
 		if (!ret[i].cmd)
 			printf("\nPreotection Missing\n");//										FIX!
-		ret[i].ops = (char **)malloc(sizeof(char *) * (count_ops(args, &j) + 1));
+		ret[i].ops = (char **)malloc(sizeof(char *)
+				* (count_ops(args, &j) + 1));
 		if (!ret[i].ops)
 			printf("\nPreotection Missing\n");//										FIX!
 	}
@@ -91,16 +93,17 @@ t_lexer	*tokenize(char *line)
 
 t_lexer	*token_fill(t_lexer *ret, char **args)
 {
-	int	i;
-	int	j;
-	int	z;
+	int			i;
+	int			j;
+	int			z;
+	char	*path;
 
 	i = 0;
 	z = 0;
 	while (args[i])
 	{
 		j = 0;
-		while(args[i] && !is_op(args[i][0]))
+		while (args[i] && !is_op(args[i][0]))
 		{
 			ret[z].cmd[j] = args[i];
 			i++;
@@ -108,7 +111,7 @@ t_lexer	*token_fill(t_lexer *ret, char **args)
 		}
 		ret[z].cmd[j] = NULL;
 		j = 0;
-		while(args[i] && is_op(args[i][0]))
+		while (args[i] && is_op(args[i][0]))
 		{
 			ret[z].ops[j] = args[i];
 			j++;
@@ -117,6 +120,18 @@ t_lexer	*token_fill(t_lexer *ret, char **args)
 		ret[z].ops[j] = NULL;
 		z++;
 	}
-	// path_finder(ret);
-	return ret;
+	ret[z].cmd = NULL;
+	z = 0;
+	while (ret[z].cmd != NULL && ret[z].cmd[0] != NULL)
+	{
+		path = path_finder(&ret[z], ret[z].cmd[0], getenv("PATH"));
+		if (!path)
+		{
+			printf("\nCommand not found\n");
+			break ;
+		}
+		printf("PATH: %s\n", ret[z].path);
+		z++;
+	}
+	return (ret);
 }
