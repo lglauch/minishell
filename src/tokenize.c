@@ -6,7 +6,7 @@
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 10:07:51 by rchavez@stu       #+#    #+#             */
-/*   Updated: 2024/05/20 11:57:25 by rchavez          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:49:25 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,3 +139,4 @@ t_lexer	*token_fill(t_lexer *ret, char **args)
 	// path_finder(ret);
 	return ret;
 }
+

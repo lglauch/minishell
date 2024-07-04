@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:27:55 by lglauch           #+#    #+#             */
-/*   Updated: 2024/07/04 11:10:09 by rchavez          ###   ########.fr       */
+/*   Created: 2024/06/17 11:46:15 by lglauch           #+#    #+#             */
+/*   Updated: 2024/07/02 15:15:04 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	handle_ctrlc(int signal)
+int	unset_command(t_lexer *temp)
 {
-	(void)signal;
-	if (g_signal == 0)
+	char	*name;
+	char	**env;
+	int		i;
+
+	name = temp->cmd[1];
+	if (!name)
+		return (0);
+	env = *ft_env();
+	i = -1;
+	while (env[++i])
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		*get_exit_status() = 1;
+		if (!ft_strncmp(env[i], name, ft_strlen(name)))
+		{
+			free(env[i]);
+			while (env[++i])
+				env[i - 1] = env[i];
+			env[i - 1] = NULL;
+			return (0);
+		}
 	}
-	//free later
-}
-
-void	signal_handler(void)
-{
-	if (g_signal == 0)
-		signal(SIGINT, handle_ctrlc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	signal_temp(int signal)
-{
-	(void)signal;
-	*get_exit_status() = 130;
+	return (0);
 }

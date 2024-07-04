@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   init_err.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:27:55 by lglauch           #+#    #+#             */
-/*   Updated: 2024/07/04 11:10:09 by rchavez          ###   ########.fr       */
+/*   Created: 2024/06/28 10:44:14 by rchavez           #+#    #+#             */
+/*   Updated: 2024/07/04 11:47:17 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_ctrlc(int signal)
+void	ft_perror(char *s1, char *s2, char *s3)
 {
-	(void)signal;
-	if (g_signal == 0)
+	if (s1)
+		write(2, s1, ft_strlen(s1));
+	if (s2)
+		write(2, s2, ft_strlen(s2));
+	if (s3)
+		write(2, s3, ft_strlen(s3));
+}
+
+void	ft_perror_spc(char *s1, char *s2, char *s3)
+{
+	size_t	i;
+
+	i = 0;
+	if (s1)
+		write(2, s1, ft_strlen(s1));
+	if (s2)
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		*get_exit_status() = 1;
+		while(s2[i] && !is_spc(s2[i]) && s2[i] != '|')
+		{
+			write(2, &s2[i], 1);
+			i++;
+		}
 	}
-	//free later
-}
-
-void	signal_handler(void)
-{
-	if (g_signal == 0)
-		signal(SIGINT, handle_ctrlc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	signal_temp(int signal)
-{
-	(void)signal;
-	*get_exit_status() = 130;
+	if (s3)
+		write(2, s3, ft_strlen(s3));
 }

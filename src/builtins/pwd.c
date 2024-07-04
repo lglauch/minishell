@@ -1,40 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:27:55 by lglauch           #+#    #+#             */
-/*   Updated: 2024/07/04 11:10:09 by rchavez          ###   ########.fr       */
+/*   Created: 2024/06/12 13:33:05 by leo               #+#    #+#             */
+/*   Updated: 2024/06/28 14:21:25 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	handle_ctrlc(int signal)
+int	pwd_command(void)
 {
-	(void)signal;
-	if (g_signal == 0)
+	char	*path;
+
+	path = getcwd(NULL, 0);
+	if (!path)
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		*get_exit_status() = 1;
+		write(2, "pwd: error retrieving current directory\n", 40);
+		return (1);
 	}
-	//free later
-}
-
-void	signal_handler(void)
-{
-	if (g_signal == 0)
-		signal(SIGINT, handle_ctrlc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	signal_temp(int signal)
-{
-	(void)signal;
-	*get_exit_status() = 130;
+	printf("%s\n", path);	
+	free(path);
+	return (0);
 }

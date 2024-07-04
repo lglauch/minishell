@@ -1,0 +1,9 @@
+[submodule "libftnew"]
+	path = libftnew
+	url = https://github.com/lglauch/libftnew.git
+[submodule "ft_malloc"]
+	path = ft_malloc
+	url = https://github.com/rodalcham/ft_malloc.git
+[submodule "MLibft"]
+	path = MLibft
+	url = https://github.com/rodalcham/MLibft.git

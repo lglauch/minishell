@@ -1,40 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   t_file.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:27:55 by lglauch           #+#    #+#             */
-/*   Updated: 2024/07/04 11:10:09 by rchavez          ###   ########.fr       */
+/*   Created: 2024/06/04 15:06:55 by rchavez           #+#    #+#             */
+/*   Updated: 2024/06/18 11:47:27 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_ctrlc(int signal)
+t_file	*new_file(void)
 {
-	(void)signal;
-	if (g_signal == 0)
-	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		*get_exit_status() = 1;
-	}
-	//free later
+	t_file	*ret;
+
+	ret = (t_file *)malloc(sizeof(t_file));
+	if (!ret)
+		return (NULL);
+	ret->fd = 0;
+	return (ret);
 }
 
-void	signal_handler(void)
+void	set_file(t_file *file, char *file_n, int mode_n, int fd_n)
 {
-	if (g_signal == 0)
-		signal(SIGINT, handle_ctrlc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	signal_temp(int signal)
-{
-	(void)signal;
-	*get_exit_status() = 130;
+	file->filename = file_n;
+	file->mode = mode_n;
+	file->fd = fd_n;
 }

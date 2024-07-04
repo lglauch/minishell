@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavez <rchavez@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:27:55 by lglauch           #+#    #+#             */
-/*   Updated: 2024/07/04 11:10:09 by rchavez          ###   ########.fr       */
+/*   Created: 2024/05/23 21:09:53 by rchavez@stu       #+#    #+#             */
+/*   Updated: 2024/06/28 14:17:29 by rchavez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_ctrlc(int signal)
+void	ft_error(int errno)
 {
-	(void)signal;
-	if (g_signal == 0)
-	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		*get_exit_status() = 1;
-	}
-	//free later
-}
-
-void	signal_handler(void)
-{
-	if (g_signal == 0)
-		signal(SIGINT, handle_ctrlc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	signal_temp(int signal)
-{
-	(void)signal;
-	*get_exit_status() = 130;
+	if (errno == -1)
+		write(2, "CANNOT ALLOCATE MEMORY.\n", 24);
+	else if (errno == -2)
+		write(2, "FORK: MEMORY EXHAUSTED.\n", 24);
+	else if (errno == -3)
+		write(2, "DUP2: CANNOT REDIRECT INPUT/OUTPUT.\n", 36);
+	else if (errno == -4)
+		write(2, "EXECVE: FAILED TO REPLACE PROCESS.\n", 35);
+	else if (errno == -5)
+		write(2, "PIPE: MEMORY EXHAUSTED.\n", 24);
+	// ft_free_envp(*get_envp());
+	exit(*get_exit_status());
 }
